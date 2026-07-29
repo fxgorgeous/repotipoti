@@ -22,3 +22,10 @@ It processes transactions off the main chain while still benefiting from Ethereu
 function setMessage(string memory newMessage) public {
     message = newMessage;
 }
+
+### Explicit Getter Function
+
+```solidity
+function getMessage() public view returns (string memory) {
+    return message;
+}
