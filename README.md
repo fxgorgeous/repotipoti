@@ -64,3 +64,12 @@ function transferOwnership(address newOwner) public onlyOwner {
     require(newOwner != address(0), "Invalid address");
     owner = newOwner;
 }
+
+### Simple Mapping
+
+```solidity
+mapping(address => uint256) public balances;
+
+function deposit() public payable {
+    balances[msg.sender] += msg.value;
+}
