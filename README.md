@@ -46,3 +46,13 @@ function setMessage(string memory newMessage) public {
 constructor(string memory initialMessage) {
     message = initialMessage;
 }
+
+### Adding Owner Variable
+
+```solidity
+address public owner;
+
+constructor(string memory initialMessage) {
+    message = initialMessage;
+    owner = msg.sender;
+}
