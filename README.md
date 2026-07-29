@@ -73,3 +73,13 @@ mapping(address => uint256) public balances;
 function deposit() public payable {
     balances[msg.sender] += msg.value;
 }
+
+### Deposit Event
+
+```solidity
+event Deposit(address indexed user, uint256 amount);
+
+function deposit() public payable {
+    balances[msg.sender] += msg.value;
+    emit Deposit(msg.sender, msg.value);
+}
