@@ -9,3 +9,9 @@ My goal is to understand how Base works and gradually build practical knowledge.
 Base combines the security of Ethereum with much lower fees and faster confirmations.  
 
 This makes it a great network for learning and experimenting.
+
+### Understanding Layer 2
+
+Base is a Layer 2 solution built on top of Ethereum.  
+
+It processes transactions off the main chain while still benefiting from Ethereum’s security.
