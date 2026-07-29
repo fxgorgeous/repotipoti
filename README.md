@@ -15,3 +15,10 @@ This makes it a great network for learning and experimenting.
 Base is a Layer 2 solution built on top of Ethereum.  
 
 It processes transactions off the main chain while still benefiting from Ethereum’s security.
+
+### Adding a Setter Function
+
+```solidity
+function setMessage(string memory newMessage) public {
+    message = newMessage;
+}
