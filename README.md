@@ -56,3 +56,11 @@ constructor(string memory initialMessage) {
     message = initialMessage;
     owner = msg.sender;
 }
+
+### Transfer Ownership
+
+```solidity
+function transferOwnership(address newOwner) public onlyOwner {
+    require(newOwner != address(0), "Invalid address");
+    owner = newOwner;
+}
