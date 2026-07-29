@@ -29,3 +29,13 @@ function setMessage(string memory newMessage) public {
 function getMessage() public view returns (string memory) {
     return message;
 }
+
+### Adding an Event
+
+```solidity
+event MessageUpdated(address indexed sender, string newMessage);
+
+function setMessage(string memory newMessage) public {
+    message = newMessage;
+    emit MessageUpdated(msg.sender, newMessage);
+}
