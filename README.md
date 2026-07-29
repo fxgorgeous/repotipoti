@@ -83,3 +83,14 @@ function deposit() public payable {
     balances[msg.sender] += msg.value;
     emit Deposit(msg.sender, msg.value);
 }
+
+### Adding Require Statements
+
+```solidity
+function withdraw(uint256 amount) public {
+    require(amount > 0, "Amount must be greater than 0");
+    require(balances[msg.sender] >= amount, "Insufficient balance");
+    
+    balances[msg.sender] -= amount;
+    payable(msg.sender).transfer(amount);
+}
