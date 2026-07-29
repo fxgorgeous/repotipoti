@@ -39,3 +39,10 @@ function setMessage(string memory newMessage) public {
     message = newMessage;
     emit MessageUpdated(msg.sender, newMessage);
 }
+
+### Adding a Constructor
+
+```solidity
+constructor(string memory initialMessage) {
+    message = initialMessage;
+}
