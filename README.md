@@ -198,3 +198,15 @@ interface IExample {
 ERC20 is the standard interface for fungible tokens on Ethereum and Base.
 
 Almost every token you see follows this standard.
+
+### Transfer Event
+
+```solidity
+event Transfer(address indexed from, address indexed to, uint256 value);
+
+function transfer(address to, uint256 amount) public returns (bool) {
+    balanceOf[msg.sender] -= amount;
+    balanceOf[to] += amount;
+    emit Transfer(msg.sender, to, amount);
+    return true;
+}
