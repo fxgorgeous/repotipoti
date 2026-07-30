@@ -185,3 +185,10 @@ function isOwner() public view returns (bool) {
 enum Status { Pending, Active, Completed }
 
 Status public currentStatus;
+
+### Basic Interface
+
+```solidity
+interface IExample {
+    function getValue() external view returns (uint256);
+}
