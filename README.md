@@ -115,3 +115,10 @@ It is one of the most important global variables in Solidity.
 function deposit() public payable {
     balances[msg.sender] += msg.value;
 }
+
+### Payable Functions
+
+```solidity
+function deposit() public payable {
+    balances[msg.sender] += msg.value;
+}
