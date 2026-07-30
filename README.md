@@ -108,3 +108,10 @@ modifier onlyOwner() {
 `msg.sender` is the address that is calling the function.
 
 It is one of the most important global variables in Solidity.
+
+### Payable Functions
+
+```solidity
+function deposit() public payable {
+    balances[msg.sender] += msg.value;
+}
