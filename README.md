@@ -122,3 +122,10 @@ function deposit() public payable {
 function deposit() public payable {
     balances[msg.sender] += msg.value;
 }
+
+### Fallback Function
+
+```solidity
+fallback() external payable {
+    // Executes when no other function matches
+}
