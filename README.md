@@ -129,3 +129,12 @@ function deposit() public payable {
 fallback() external payable {
     // Executes when no other function matches
 }
+
+### The address Type
+
+```solidity
+address public user;
+
+function setUser(address _user) public {
+    user = _user;
+}
