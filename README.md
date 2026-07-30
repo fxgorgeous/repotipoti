@@ -156,3 +156,14 @@ address[] public userList;
 function addUser(address user) public {
     userList.push(user);
 }
+
+### Simple Loop Example
+
+```solidity
+function sum(uint256[] memory numbers) public pure returns (uint256) {
+    uint256 total = 0;
+    for (uint256 i = 0; i < numbers.length; i++) {
+        total += numbers[i];
+    }
+    return total;
+}
