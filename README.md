@@ -220,3 +220,9 @@ function burn(uint256 amount) public {
     totalSupply -= amount;
     emit Transfer(msg.sender, address(0), amount);
 }
+
+### Name and Symbol
+
+```solidity
+string public name = "MyBaseToken";
+string public symbol = "MBT";
