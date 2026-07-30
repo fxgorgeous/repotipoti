@@ -167,3 +167,14 @@ function sum(uint256[] memory numbers) public pure returns (uint256) {
     }
     return total;
 }
+
+### If / Else Example
+
+```solidity
+function isOwner() public view returns (bool) {
+    if (msg.sender == owner) {
+        return true;
+    } else {
+        return false;
+    }
+}
