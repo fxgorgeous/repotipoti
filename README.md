@@ -178,3 +178,10 @@ function isOwner() public view returns (bool) {
         return false;
     }
 }
+
+### Simple Enum
+
+```solidity
+enum Status { Pending, Active, Completed }
+
+Status public currentStatus;
