@@ -192,3 +192,9 @@ Status public currentStatus;
 interface IExample {
     function getValue() external view returns (uint256);
 }
+
+### Introduction to ERC20
+
+ERC20 is the standard interface for fungible tokens on Ethereum and Base.
+
+Almost every token you see follows this standard.
