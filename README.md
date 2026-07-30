@@ -210,3 +210,13 @@ function transfer(address to, uint256 amount) public returns (bool) {
     emit Transfer(msg.sender, to, amount);
     return true;
 }
+
+### Burn Function
+
+```solidity
+function burn(uint256 amount) public {
+    require(balanceOf[msg.sender] >= amount, "Insufficient balance");
+    balanceOf[msg.sender] -= amount;
+    totalSupply -= amount;
+    emit Transfer(msg.sender, address(0), amount);
+}
