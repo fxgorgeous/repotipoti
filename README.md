@@ -94,3 +94,11 @@ function withdraw(uint256 amount) public {
     balances[msg.sender] -= amount;
     payable(msg.sender).transfer(amount);
 }
+
+### Creating a Modifier
+
+```solidity
+modifier onlyOwner() {
+    require(msg.sender == owner, "Not the owner");
+    _;
+}
