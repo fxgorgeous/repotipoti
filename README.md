@@ -147,3 +147,12 @@ struct User {
     uint256 balance;
     bool active;
 }
+
+### Simple Array
+
+```solidity
+address[] public userList;
+
+function addUser(address user) public {
+    userList.push(user);
+}
