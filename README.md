@@ -138,3 +138,12 @@ address public user;
 function setUser(address _user) public {
     user = _user;
 }
+
+### Simple Struct
+
+```solidity
+struct User {
+    address addr;
+    uint256 balance;
+    bool active;
+}
