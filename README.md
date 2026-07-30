@@ -102,3 +102,9 @@ modifier onlyOwner() {
     require(msg.sender == owner, "Not the owner");
     _;
 }
+
+### Understanding msg.sender
+
+`msg.sender` is the address that is calling the function.
+
+It is one of the most important global variables in Solidity.
