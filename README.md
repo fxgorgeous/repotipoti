@@ -226,3 +226,9 @@ function burn(uint256 amount) public {
 ```solidity
 string public name = "MyBaseToken";
 string public symbol = "MBT";
+
+### Introduction to ERC721
+
+ERC721 is the standard for non-fungible tokens (NFTs).
+
+Each token is unique and has its own ID.
