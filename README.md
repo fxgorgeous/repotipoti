@@ -284,3 +284,10 @@ modifier whenNotPaused() {
     require(!paused, "Contract is paused");
     _;
 }
+
+### Get Contract Balance
+
+```solidity
+function getContractBalance() public view returns (uint256) {
+    return address(this).balance;
+}
