@@ -242,3 +242,13 @@ function transfer(address to, uint256 tokenId) public {
     balanceOf[msg.sender] -= 1;
     balanceOf[to] += 1;
 }
+
+### NFT Approval
+
+```solidity
+mapping(uint256 => address) public getApproved;
+
+function approve(address to, uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    getApproved[tokenId] = to;
+}
