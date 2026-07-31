@@ -252,3 +252,13 @@ function approve(address to, uint256 tokenId) public {
     require(ownerOf[tokenId] == msg.sender, "Not the owner");
     getApproved[tokenId] = to;
 }
+
+### Burn NFT
+
+```solidity
+function burn(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    delete ownerOf[tokenId];
+    balanceOf[msg.sender] -= 1;
+    delete getApproved[tokenId];
+}
