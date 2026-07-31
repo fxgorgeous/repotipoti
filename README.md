@@ -274,3 +274,13 @@ function mint() public payable {
     balanceOf[msg.sender] += 1;
     nextTokenId++;
 }
+
+### Pause Functionality
+
+```solidity
+bool public paused = false;
+
+modifier whenNotPaused() {
+    require(!paused, "Contract is paused");
+    _;
+}
