@@ -232,3 +232,13 @@ string public symbol = "MBT";
 ERC721 is the standard for non-fungible tokens (NFTs).
 
 Each token is unique and has its own ID.
+
+### NFT Transfer
+
+```solidity
+function transfer(address to, uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    ownerOf[tokenId] = to;
+    balanceOf[msg.sender] -= 1;
+    balanceOf[to] += 1;
+}
