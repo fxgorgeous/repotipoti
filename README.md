@@ -291,3 +291,18 @@ modifier whenNotPaused() {
 function getContractBalance() public view returns (uint256) {
     return address(this).balance;
 }
+
+### Batch Mint
+
+```solidity
+function batchMint(uint256 quantity) public payable {
+    require(quantity > 0, "Quantity must be greater than 0");
+    require(nextTokenId + quantity <= maxSupply, "Exceeds max supply");
+    require(msg.value >= mintPrice * quantity, "Insufficient payment");
+
+    for (uint256 i = 0; i < quantity; i++) {
+        ownerOf[nextTokenId] = msg.sender;
+        balanceOf[msg.sender] += 1;
+        nextTokenId++;
+    }
+}
