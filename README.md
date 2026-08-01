@@ -371,3 +371,9 @@ function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
            interfaceId == 0x5b5e139f || // ERC721Metadata
            interfaceId == 0x01ffc9a7;    // ERC165
 }
+
+### NFT Name and Symbol
+
+```solidity
+string public name = "Base NFT Collection";
+string public symbol = "BNFT";
