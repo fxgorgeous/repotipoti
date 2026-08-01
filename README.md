@@ -377,3 +377,12 @@ function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
 ```solidity
 string public name = "Base NFT Collection";
 string public symbol = "BNFT";
+
+### Safer ownerOf
+
+```solidity
+function ownerOf(uint256 tokenId) public view returns (address) {
+    address owner = ownerOf[tokenId];
+    require(owner != address(0), "Token does not exist");
+    return owner;
+}
