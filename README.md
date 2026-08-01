@@ -362,3 +362,12 @@ string public baseURI;
 function setBaseURI(string memory newBaseURI) public onlyOwner {
     baseURI = newBaseURI;
 }
+
+### supportsInterface (ERC165)
+
+```solidity
+function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
+    return interfaceId == 0x80ac58cd || // ERC721
+           interfaceId == 0x5b5e139f || // ERC721Metadata
+           interfaceId == 0x01ffc9a7;    // ERC165
+}
