@@ -343,3 +343,13 @@ function mint() public payable {
     balanceOf[msg.sender] += 1;
     nextTokenId++;
 }
+
+### Experience Points
+
+```solidity
+mapping(uint256 => uint256) public experience;
+
+function addExperience(uint256 tokenId, uint256 amount) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    experience[tokenId] += amount;
+}
