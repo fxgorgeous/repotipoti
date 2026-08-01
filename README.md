@@ -353,3 +353,12 @@ function addExperience(uint256 tokenId, uint256 amount) public {
     require(ownerOf[tokenId] == msg.sender, "Not the owner");
     experience[tokenId] += amount;
 }
+
+### Base URI for Metadata
+
+```solidity
+string public baseURI;
+
+function setBaseURI(string memory newBaseURI) public onlyOwner {
+    baseURI = newBaseURI;
+}
