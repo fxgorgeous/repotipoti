@@ -386,3 +386,10 @@ function ownerOf(uint256 tokenId) public view returns (address) {
     require(owner != address(0), "Token does not exist");
     return owner;
 }
+
+### Token Status Enum
+
+```solidity
+enum TokenStatus { Normal, Locked, Staked }
+
+mapping(uint256 => TokenStatus) public tokenStatus;
