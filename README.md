@@ -306,3 +306,14 @@ function batchMint(uint256 quantity) public payable {
         nextTokenId++;
     }
 }
+
+### Token Ownership History Idea
+
+```solidity
+mapping(uint256 => address[]) public ownershipHistory;
+
+function transfer(address to, uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    ownershipHistory[tokenId].push(to);
+    // rest of transfer logic
+}
