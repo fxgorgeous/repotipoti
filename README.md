@@ -428,3 +428,16 @@ function calculateReward(uint256 tokenId) public view returns (uint256) {
     uint256 timeStaked = block.timestamp - stakedAt[tokenId];
     return (timeStaked * rewardPerDay) / 1 days;
 }
+
+### Reward Multiplier by Level
+
+```solidity
+function calculateReward(uint256 tokenId) public view returns (uint256) {
+    if (!isStaked[tokenId]) return 0;
+    
+    uint256 timeStaked = block.timestamp - stakedAt[tokenId];
+    uint256 baseReward = (timeStaked * rewardPerDay) / 1 days;
+    
+    // Higher level = higher rewards
+    return baseReward * tokenLevel[tokenId];
+}
