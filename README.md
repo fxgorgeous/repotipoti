@@ -393,3 +393,12 @@ function ownerOf(uint256 tokenId) public view returns (address) {
 enum TokenStatus { Normal, Locked, Staked }
 
 mapping(uint256 => TokenStatus) public tokenStatus;
+
+### Unlock Token Function
+
+```solidity
+function unlockToken(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(tokenStatus[tokenId] == TokenStatus.Locked, "Token is not locked");
+    tokenStatus[tokenId] = TokenStatus.Normal;
+}
