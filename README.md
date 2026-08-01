@@ -417,3 +417,14 @@ function stake(uint256 tokenId) public {
     stakedAt[tokenId] = block.timestamp;
     tokenStatus[tokenId] = TokenStatus.Staked;
 }
+
+### Staking Rewards Idea
+
+```solidity
+uint256 public rewardPerDay = 0.001 ether;
+
+function calculateReward(uint256 tokenId) public view returns (uint256) {
+    if (!isStaked[tokenId]) return 0;
+    uint256 timeStaked = block.timestamp - stakedAt[tokenId];
+    return (timeStaked * rewardPerDay) / 1 days;
+}
