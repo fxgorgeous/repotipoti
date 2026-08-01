@@ -402,3 +402,18 @@ function unlockToken(uint256 tokenId) public {
     require(tokenStatus[tokenId] == TokenStatus.Locked, "Token is not locked");
     tokenStatus[tokenId] = TokenStatus.Normal;
 }
+
+### Simple NFT Staking
+
+```solidity
+mapping(uint256 => bool) public isStaked;
+mapping(uint256 => uint256) public stakedAt;
+
+function stake(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(!isStaked[tokenId], "Already staked");
+    
+    isStaked[tokenId] = true;
+    stakedAt[tokenId] = block.timestamp;
+    tokenStatus[tokenId] = TokenStatus.Staked;
+}
