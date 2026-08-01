@@ -317,3 +317,16 @@ function transfer(address to, uint256 tokenId) public {
     ownershipHistory[tokenId].push(to);
     // rest of transfer logic
 }
+
+### Original Minter Tracking
+
+```solidity
+mapping(uint256 => address) public originalMinter;
+
+function mint() public payable {
+    // existing checks...
+    originalMinter[nextTokenId] = msg.sender;
+    ownerOf[nextTokenId] = msg.sender;
+    balanceOf[msg.sender] += 1;
+    nextTokenId++;
+}
