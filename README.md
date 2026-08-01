@@ -330,3 +330,16 @@ function mint() public payable {
     balanceOf[msg.sender] += 1;
     nextTokenId++;
 }
+
+### Token Level / Rarity
+
+```solidity
+mapping(uint256 => uint256) public tokenLevel;
+
+function mint() public payable {
+    // existing checks...
+    tokenLevel[nextTokenId] = 1; // starting level
+    ownerOf[nextTokenId] = msg.sender;
+    balanceOf[msg.sender] += 1;
+    nextTokenId++;
+}
