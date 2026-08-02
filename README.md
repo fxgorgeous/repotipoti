@@ -478,3 +478,20 @@ function unstake(uint256 tokenId) public {
         payable(msg.sender).transfer(reward);
     }
 }
+
+### Max Staked Per User
+
+```solidity
+uint256 public maxStakedPerUser = 5;
+mapping(address => uint256) public stakedCount;
+
+function stake(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(!isStaked[tokenId], "Already staked");
+    require(stakedCount[msg.sender] < maxStakedPerUser, "Max staked reached");
+
+    isStaked[tokenId] = true;
+    stakedAt[tokenId] = block.timestamp;
+    stakedCount[msg.sender] += 1;
+    tokenStatus[tokenId] = TokenStatus.Staked;
+}
