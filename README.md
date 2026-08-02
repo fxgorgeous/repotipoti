@@ -455,3 +455,26 @@ function unstake(uint256 tokenId) public {
     isStaked[tokenId] = false;
     tokenStatus[tokenId] = TokenStatus.Normal;
 }
+
+### Early Unstake Penalty
+
+```solidity
+uint256 public earlyUnstakePenalty = 20; // 20%
+
+function unstake(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(isStaked[tokenId], "Not staked");
+
+    uint256 reward = calculateReward(tokenId);
+    
+    if (block.timestamp < stakedAt[tokenId] + minStakeTime) {
+        reward = reward * (100 - earlyUnstakePenalty) / 100;
+    }
+
+    isStaked[tokenId] = false;
+    tokenStatus[tokenId] = TokenStatus.Normal;
+    
+    if (reward > 0) {
+        payable(msg.sender).transfer(reward);
+    }
+}
