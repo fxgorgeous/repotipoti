@@ -495,3 +495,10 @@ function stake(uint256 tokenId) public {
     stakedCount[msg.sender] += 1;
     tokenStatus[tokenId] = TokenStatus.Staked;
 }
+
+### Get User Staked Tokens (Idea)
+
+Since Solidity does not support returning dynamic arrays of all staked tokens easily without extra storage, one common approach is to keep an array per user:
+
+```solidity
+mapping(address => uint256[]) public userStakedTokens;
