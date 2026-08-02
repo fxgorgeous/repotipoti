@@ -502,3 +502,15 @@ Since Solidity does not support returning dynamic arrays of all staked tokens ea
 
 ```solidity
 mapping(address => uint256[]) public userStakedTokens;
+
+### Total Staked Counter
+
+```solidity
+uint256 public totalStaked;
+
+function stake(uint256 tokenId) public {
+    // existing checks...
+    isStaked[tokenId] = true;
+    totalStaked += 1;
+    stakedCount[msg.sender] += 1;
+}
