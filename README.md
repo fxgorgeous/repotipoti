@@ -441,3 +441,17 @@ function calculateReward(uint256 tokenId) public view returns (uint256) {
     // Higher level = higher rewards
     return baseReward * tokenLevel[tokenId];
 }
+
+### Minimum Staking Period
+
+```solidity
+uint256 public minStakeTime = 1 days;
+
+function unstake(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(isStaked[tokenId], "Not staked");
+    require(block.timestamp >= stakedAt[tokenId] + minStakeTime, "Minimum stake time not reached");
+    
+    isStaked[tokenId] = false;
+    tokenStatus[tokenId] = TokenStatus.Normal;
+}
