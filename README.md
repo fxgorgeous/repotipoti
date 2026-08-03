@@ -535,3 +535,15 @@ function stake(uint256 tokenId) public {
     require(!stakingPaused, "Staking is paused");
     // existing stake logic
 }
+
+### Reentrancy Protection Idea
+
+```solidity
+bool private locked;
+
+modifier noReentrant() {
+    require(!locked, "No reentrancy");
+    locked = true;
+    _;
+    locked = false;
+}
