@@ -514,3 +514,15 @@ function stake(uint256 tokenId) public {
     totalStaked += 1;
     stakedCount[msg.sender] += 1;
 }
+
+### Total Rewards Distributed
+
+```solidity
+uint256 public totalRewardsDistributed;
+
+function claimReward(uint256 tokenId) public {
+    // existing logic...
+    uint256 reward = calculateReward(tokenId);
+    totalRewardsDistributed += reward;
+    payable(msg.sender).transfer(reward);
+}
