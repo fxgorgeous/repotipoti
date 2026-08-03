@@ -559,3 +559,18 @@ Features implemented so far:
 - Staking system with rewards  
 - Pause controls  
 - Access control (onlyOwner)
+
+### Simple Breeding Idea
+
+```solidity
+function breed(uint256 tokenId1, uint256 tokenId2) public {
+    require(ownerOf[tokenId1] == msg.sender, "Not owner of first token");
+    require(ownerOf[tokenId2] == msg.sender, "Not owner of second token");
+    require(tokenLevel[tokenId1] >= 3 && tokenLevel[tokenId2] >= 3, "Level too low");
+
+    // Mint a new NFT
+    ownerOf[nextTokenId] = msg.sender;
+    balanceOf[msg.sender] += 1;
+    tokenLevel[nextTokenId] = 1;
+    nextTokenId++;
+}
