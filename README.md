@@ -526,3 +526,12 @@ function claimReward(uint256 tokenId) public {
     totalRewardsDistributed += reward;
     payable(msg.sender).transfer(reward);
 }
+### Emergency Pause for Staking
+
+```solidity
+bool public stakingPaused = false;
+
+function stake(uint256 tokenId) public {
+    require(!stakingPaused, "Staking is paused");
+    // existing stake logic
+}
