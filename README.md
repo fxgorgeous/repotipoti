@@ -547,3 +547,15 @@ modifier noReentrant() {
     _;
     locked = false;
 }
+
+### Current Contract Summary
+
+Features implemented so far:
+
+- ERC721 basic functionality  
+- Minting with payment and max supply  
+- Metadata (tokenURI)  
+- Levels and experience  
+- Staking system with rewards  
+- Pause controls  
+- Access control (onlyOwner)
