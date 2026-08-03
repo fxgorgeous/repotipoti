@@ -584,3 +584,14 @@ function breed(uint256 tokenId1, uint256 tokenId2) public payable {
     require(msg.value >= breedingCost, "Insufficient payment");
     // existing breeding logic
 }
+
+### Simple Attribute System
+
+```solidity
+struct Attributes {
+    uint8 strength;
+    uint8 agility;
+    uint8 intelligence;
+}
+
+mapping(uint256 => Attributes) public tokenAttributes;
