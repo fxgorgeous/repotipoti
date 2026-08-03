@@ -574,3 +574,13 @@ function breed(uint256 tokenId1, uint256 tokenId2) public {
     tokenLevel[nextTokenId] = 1;
     nextTokenId++;
 }
+
+### Breeding Cost
+
+```solidity
+uint256 public breedingCost = 0.01 ether;
+
+function breed(uint256 tokenId1, uint256 tokenId2) public payable {
+    require(msg.value >= breedingCost, "Insufficient payment");
+    // existing breeding logic
+}
