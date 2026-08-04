@@ -730,3 +730,15 @@ function royaltyInfo(uint256, uint256 salePrice)
     royaltyAmount = (salePrice * royaltyPercentage) / 100;
     receiver = royaltyReceiver;
 }
+
+### Contract Overview
+
+This contract currently includes:
+
+- ERC721 NFT functionality  
+- Minting system with payments  
+- Levels, experience and attributes  
+- Staking with rewards  
+- Basic marketplace (listings + offers)  
+- Royalties  
+- Access control and pause features  
