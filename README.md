@@ -667,3 +667,19 @@ function buyToken(uint256 tokenId) public payable {
     payable(item.seller).transfer(sellerAmount);
     // fee stays in the contract
 }
+### Listing Event
+
+```solidity
+event TokenListed(
+    uint256 indexed tokenId,
+    address indexed seller,
+    uint256 price
+);
+
+function listToken(uint256 tokenId, uint256 price) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(price > 0, "Price must be greater than 0");
+
+    listings[tokenId] = Listing(msg.sender, price, true);
+    emit TokenListed(tokenId, msg.sender, price);
+}
