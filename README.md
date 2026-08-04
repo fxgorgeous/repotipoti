@@ -621,3 +621,13 @@ function getRarity(uint256 tokenId) public view returns (string memory) {
     if (power >= 20) return "Rare";
     return "Common";
 }
+### Simple Leaderboard Idea
+
+```solidity
+address[] public topPlayers;
+mapping(address => uint256) public playerScore;
+
+function updateScore(address player, uint256 newScore) public {
+    playerScore[player] = newScore;
+    // In a real implementation you would insert into a sorted leaderboard
+}
