@@ -706,3 +706,15 @@ event OfferAccepted(uint256 indexed tokenId, address indexed seller, address ind
 event OfferCancelled(uint256 indexed tokenId, address indexed buyer);
 
 // Emit these events in the corresponding functions
+
+### Royalty Idea (ERC2981 style)
+
+```solidity
+address public royaltyReceiver;
+uint256 public royaltyPercentage = 5; // 5%
+
+function setRoyalty(address receiver, uint256 percentage) public onlyOwner {
+    require(percentage <= 10, "Royalty too high");
+    royaltyReceiver = receiver;
+    royaltyPercentage = percentage;
+}
