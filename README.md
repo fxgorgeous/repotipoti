@@ -648,3 +648,22 @@ function listToken(uint256 tokenId, uint256 price) public {
     
     listings[tokenId] = Listing(msg.sender, price, true);
 }
+### Marketplace Fee
+
+```solidity
+uint256 public marketplaceFee = 2; // 2%
+
+function buyToken(uint256 tokenId) public payable {
+    Listing memory item = listings[tokenId];
+    require(item.active, "Listing not active");
+    require(msg.value >= item.price, "Insufficient payment");
+
+    uint256 fee = (item.price * marketplaceFee) / 100;
+    uint256 sellerAmount = item.price - fee;
+
+    listings[tokenId].active = false;
+
+    // Transfer ownership...
+    payable(item.seller).transfer(sellerAmount);
+    // fee stays in the contract
+}
