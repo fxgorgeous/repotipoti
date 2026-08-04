@@ -683,3 +683,18 @@ function listToken(uint256 tokenId, uint256 price) public {
     listings[tokenId] = Listing(msg.sender, price, true);
     emit TokenListed(tokenId, msg.sender, price);
 }
+### Offer System Idea
+
+```solidity
+struct Offer {
+    address buyer;
+    uint256 price;
+    bool active;
+}
+
+mapping(uint256 => Offer) public offers;
+
+function makeOffer(uint256 tokenId) public payable {
+    require(msg.value > 0, "Offer must be greater than 0");
+    offers[tokenId] = Offer(msg.sender, msg.value, true);
+}
