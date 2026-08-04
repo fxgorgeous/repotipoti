@@ -698,3 +698,11 @@ function makeOffer(uint256 tokenId) public payable {
     require(msg.value > 0, "Offer must be greater than 0");
     offers[tokenId] = Offer(msg.sender, msg.value, true);
 }
+### Offer Events
+
+```solidity
+event OfferMade(uint256 indexed tokenId, address indexed buyer, uint256 price);
+event OfferAccepted(uint256 indexed tokenId, address indexed seller, address indexed buyer, uint256 price);
+event OfferCancelled(uint256 indexed tokenId, address indexed buyer);
+
+// Emit these events in the corresponding functions
