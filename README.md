@@ -610,3 +610,14 @@ function levelUp(uint256 tokenId) public {
     tokenAttributes[tokenId].agility += 1;
     tokenAttributes[tokenId].intelligence += 1;
 }
+### Rarity Calculation
+
+```solidity
+function getRarity(uint256 tokenId) public view returns (string memory) {
+    uint256 power = getPowerScore(tokenId);
+    
+    if (power >= 40) return "Legendary";
+    if (power >= 30) return "Epic";
+    if (power >= 20) return "Rare";
+    return "Common";
+}
