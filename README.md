@@ -595,3 +595,18 @@ struct Attributes {
 }
 
 mapping(uint256 => Attributes) public tokenAttributes;
+
+### Attribute Boost on Level Up
+
+```solidity
+function levelUp(uint256 tokenId) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(tokenLevel[tokenId] < maxLevel, "Max level reached");
+    
+    tokenLevel[tokenId] += 1;
+    
+    // Small boost to attributes
+    tokenAttributes[tokenId].strength += 1;
+    tokenAttributes[tokenId].agility += 1;
+    tokenAttributes[tokenId].intelligence += 1;
+}
