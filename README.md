@@ -718,3 +718,15 @@ function setRoyalty(address receiver, uint256 percentage) public onlyOwner {
     royaltyReceiver = receiver;
     royaltyPercentage = percentage;
 }
+
+### ERC2981 Support Idea
+
+```solidity
+function royaltyInfo(uint256, uint256 salePrice)
+    external
+    view
+    returns (address receiver, uint256 royaltyAmount)
+{
+    royaltyAmount = (salePrice * royaltyPercentage) / 100;
+    receiver = royaltyReceiver;
+}
