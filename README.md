@@ -631,3 +631,20 @@ function updateScore(address player, uint256 newScore) public {
     playerScore[player] = newScore;
     // In a real implementation you would insert into a sorted leaderboard
 }
+### Simple Marketplace Listing
+
+```solidity
+struct Listing {
+    address seller;
+    uint256 price;
+    bool active;
+}
+
+mapping(uint256 => Listing) public listings;
+
+function listToken(uint256 tokenId, uint256 price) public {
+    require(ownerOf[tokenId] == msg.sender, "Not the owner");
+    require(price > 0, "Price must be greater than 0");
+    
+    listings[tokenId] = Listing(msg.sender, price, true);
+}
