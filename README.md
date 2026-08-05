@@ -851,3 +851,10 @@ function reveal(string memory newBaseURI) public onlyOwner {
     revealed = true;
     emit CollectionRevealed(newBaseURI);
 }
+
+### Enumerability Idea
+
+To make it easy to list all tokens of a user or all tokens in the collection, you can use:
+
+```solidity
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
