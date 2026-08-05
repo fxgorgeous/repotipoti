@@ -828,3 +828,16 @@ bytes32 public merkleRoot;
 function setMerkleRoot(bytes32 _root) public onlyOwner {
     merkleRoot = _root;
 }
+
+### Revealed / Unrevealed Metadata
+
+```solidity
+bool public revealed = false;
+string public hiddenURI;
+
+function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    if (!revealed) {
+        return hiddenURI;
+    }
+    return super.tokenURI(tokenId);
+}
