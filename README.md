@@ -817,3 +817,14 @@ function mint(string memory uri) public payable whenNotPaused nonReentrant {
     }
     // rest of mint logic
 }
+
+### Merkle Proof Allowlist Idea
+
+Instead of storing every address on-chain, it is more efficient to use a Merkle root:
+
+```solidity
+bytes32 public merkleRoot;
+
+function setMerkleRoot(bytes32 _root) public onlyOwner {
+    merkleRoot = _root;
+}
