@@ -858,3 +858,15 @@ To make it easy to list all tokens of a user or all tokens in the collection, yo
 
 ```solidity
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+
+### Batch Mint with OpenZeppelin
+
+```solidity
+function batchMint(address to, string[] memory uris) public onlyOwner {
+    for (uint256 i = 0; i < uris.length; i++) {
+        uint256 tokenId = nextTokenId;
+        nextTokenId++;
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uris[i]);
+    }
+}
