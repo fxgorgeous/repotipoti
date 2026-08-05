@@ -793,3 +793,14 @@ contract BaseNFT is ERC721URIStorage, ERC2981, Ownable, Pausable, ReentrancyGuar
         _setDefaultRoyalty(msg.sender, 500);
     }
 }
+
+### Withdraw Function
+
+```solidity
+function withdraw() public onlyOwner nonReentrant {
+    uint256 balance = address(this).balance;
+    require(balance > 0, "No funds");
+
+    (bool success, ) = payable(owner()).call{value: balance}("");
+    require(success, "Withdraw failed");
+}
