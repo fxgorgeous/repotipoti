@@ -841,3 +841,13 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
     }
     return super.tokenURI(tokenId);
 }
+
+### Reveal Event
+
+```solidity
+event CollectionRevealed(string newBaseURI);
+
+function reveal(string memory newBaseURI) public onlyOwner {
+    revealed = true;
+    emit CollectionRevealed(newBaseURI);
+}
