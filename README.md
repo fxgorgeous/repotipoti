@@ -771,3 +771,25 @@ contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
         _setDefaultRoyalty(msg.sender, 500); // 5%
     }
 }
+
+### Full OpenZeppelin NFT Skeleton
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract BaseNFT is ERC721URIStorage, ERC2981, Ownable, Pausable, ReentrancyGuard {
+    uint256 public nextTokenId;
+    uint256 public mintPrice = 0.01 ether;
+    uint256 public maxSupply = 1000;
+
+    constructor() ERC721("BaseNFT", "BNFT") Ownable(msg.sender) {
+        _setDefaultRoyalty(msg.sender, 500);
+    }
+}
