@@ -880,3 +880,16 @@ MintPhase public currentPhase = MintPhase.Closed;
 function setPhase(MintPhase newPhase) public onlyOwner {
     currentPhase = newPhase;
 }
+
+---
+
+### **Cuenta 4 - Commit 91**
+**Mensaje:** `docs: team allocation best practices`
+
+```markdown
+### Team Allocation Best Practices
+
+- Be transparent about reserved supply  
+- Avoid very large team allocations  
+- Use reserved NFTs for marketing, partnerships and community rewards  
+- Document the allocation clearly  
