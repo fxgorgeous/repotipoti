@@ -804,3 +804,16 @@ function withdraw() public onlyOwner nonReentrant {
     (bool success, ) = payable(owner()).call{value: balance}("");
     require(success, "Withdraw failed");
 }
+
+### Allowlist (Whitelist) Idea
+
+```solidity
+mapping(address => bool) public allowlist;
+bool public allowlistEnabled = true;
+
+function mint(string memory uri) public payable whenNotPaused nonReentrant {
+    if (allowlistEnabled) {
+        require(allowlist[msg.sender], "Not in allowlist");
+    }
+    // rest of mint logic
+}
