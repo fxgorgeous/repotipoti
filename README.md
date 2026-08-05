@@ -751,3 +751,12 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract MyNFT is ERC721URIStorage, Ownable {
     constructor() ERC721("MyNFT", "MNFT") Ownable(msg.sender) {}
 }
+
+### Using Pausable
+
+```solidity
+import "@openzeppelin/contracts/utils/Pausable.sol";
+
+contract MyNFT is ERC721URIStorage, Ownable, Pausable {
+    // ...
+}
