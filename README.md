@@ -870,3 +870,13 @@ function batchMint(address to, string[] memory uris) public onlyOwner {
         _setTokenURI(tokenId, uris[i]);
     }
 }
+
+### Mint Phases
+
+```solidity
+enum MintPhase { Closed, Allowlist, Public, Free }
+MintPhase public currentPhase = MintPhase.Closed;
+
+function setPhase(MintPhase newPhase) public onlyOwner {
+    currentPhase = newPhase;
+}
