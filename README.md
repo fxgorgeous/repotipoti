@@ -760,3 +760,14 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 contract MyNFT is ERC721URIStorage, Ownable, Pausable {
     // ...
 }
+
+### Adding ERC2981 Royalties
+
+```solidity
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
+
+contract MyNFT is ERC721URIStorage, ERC2981, Ownable {
+    constructor() ERC721("MyNFT", "MNFT") Ownable(msg.sender) {
+        _setDefaultRoyalty(msg.sender, 500); // 5%
+    }
+}
