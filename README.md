@@ -893,3 +893,51 @@ function setPhase(MintPhase newPhase) public onlyOwner {
 - Avoid very large team allocations  
 - Use reserved NFTs for marketing, partnerships and community rewards  
 - Document the allocation clearly  
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract BaseBasicNFT is ERC721URIStorage, Ownable, Pausable, ReentrancyGuard {
+    uint256 public nextTokenId;
+    uint256 public mintPrice = 0.01 ether;
+    uint256 public maxSupply = 1000;
+    uint256 public maxPerWallet = 5;
+
+    mapping(address => uint256) public mintedPerWallet;
+
+    constructor() ERC721("Base Basic NFT", "BBNFT") Ownable(msg.sender) {}
+
+    function mint(string memory uri) external payable whenNotPaused nonReentrant {
+        require(nextTokenId < maxSupply, "Max supply reached");
+        require(msg.value >= mintPrice, "Insufficient payment");
+        require(mintedPerWallet[msg.sender] < maxPerWallet, "Max per wallet reached");
+
+        uint256 tokenId = nextTokenId;
+        nextTokenId++;
+        mintedPerWallet[msg.sender]++;
+
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    function setMintPrice(uint256 newPrice) external onlyOwner {
+        mintPrice = newPrice;
+    }
+
+    function pause() external onlyOwner {
+        _pause();
+    }
+
+    function unpause() external onlyOwner {
+        _unpause();
+    }
+
+    function withdraw() external onlyOwner nonReentrant {
+        (bool success, ) = payable(owner()).call{value: address(this).balance}("");
+        require(success, "Withdraw failed");
+    }
+}
