@@ -980,3 +980,52 @@ contract SoulboundNFT is ERC721URIStorage, Ownable {
         _burn(tokenId);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract DailyClaimNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
+    uint256 public nextTokenId;
+    uint256 public maxSupply = 500;
+    uint256 public mintPrice = 0.02 ether;
+    uint256 public dailyReward = 0.001 ether;
+
+    mapping(uint256 => uint256) public lastClaimed;
+
+    constructor() ERC721("Daily Claim NFT", "CLAIM") Ownable(msg.sender) {}
+
+    function mint(string memory uri) external payable nonReentrant {
+        require(nextTokenId < maxSupply, "Max supply reached");
+        require(msg.value >= mintPrice, "Insufficient payment");
+
+        uint256 tokenId = nextTokenId++;
+        lastClaimed[tokenId] = block.timestamp;
+
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    function claim(uint256 tokenId) external nonReentrant {
+        require(ownerOf(tokenId) == msg.sender, "Not owner");
+        require(block.timestamp >= lastClaimed[tokenId] + 1 days, "Already claimed today");
+
+        lastClaimed[tokenId] = block.timestamp;
+        payable(msg.sender).transfer(dailyReward);
+    }
+
+    function getTimeUntilClaim(uint256 tokenId) external view returns (uint256) {
+        if (block.timestamp >= lastClaimed[tokenId] + 1 days) {
+            return 0;
+        }
+        return (lastClaimed[tokenId] + 1 days) - block.timestamp;
+    }
+
+    function withdraw() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+
+    receive() external payable {}
+}
