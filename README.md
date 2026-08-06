@@ -1126,3 +1126,27 @@ contract ProgressiveMintNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         payable(owner()).transfer(address(this).balance);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract Counter {
+    uint256 public count;
+
+    event CountChanged(uint256 newCount, address indexed by);
+
+    function increment() external {
+        count += 1;
+        emit CountChanged(count, msg.sender);
+    }
+
+    function decrement() external {
+        require(count > 0, "Count is zero");
+        count -= 1;
+        emit CountChanged(count, msg.sender);
+    }
+
+    function reset() external {
+        count = 0;
+        emit CountChanged(count, msg.sender);
+    }
+}
