@@ -1080,3 +1080,49 @@ contract SubscriptionNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
         payable(owner()).transfer(address(this).balance);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract ProgressiveMintNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
+    uint256 public nextTokenId;
+    uint256 public maxSupply = 500;
+    uint256 public basePrice = 0.01 ether;
+    uint256 public priceIncrease = 0.001 ether; // price increases every mint
+
+    constructor() ERC721("Progressive Mint NFT", "PROG") Ownable(msg.sender) {}
+
+    function getCurrentPrice() public view returns (uint256) {
+        return basePrice + (nextTokenId * priceIncrease);
+    }
+
+    function mint(string memory uri) external payable nonReentrant {
+        require(nextTokenId < maxSupply, "Max supply reached");
+        uint256 price = getCurrentPrice();
+        require(msg.value >= price, "Insufficient payment");
+
+        uint256 tokenId = nextTokenId++;
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, uri);
+
+        // Refund excess
+        if (msg.value > price) {
+            payable(msg.sender).transfer(msg.value - price);
+        }
+    }
+
+    function setBasePrice(uint256 newBasePrice) external onlyOwner {
+        basePrice = newBasePrice;
+    }
+
+    function setPriceIncrease(uint256 newIncrease) external onlyOwner {
+        priceIncrease = newIncrease;
+    }
+
+    function withdraw() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+}
