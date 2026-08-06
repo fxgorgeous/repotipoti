@@ -1202,3 +1202,49 @@ contract GuildVoting {
         return (p.yesVotes, p.noVotes, block.timestamp < p.deadline);
     }
 }
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract GuildAirdrop is Ownable {
+    using SafeERC20 for IERC20;
+
+    IERC20 public immutable token;
+    mapping(address => uint256) public claimable;
+    mapping(address => bool) public hasClaimed;
+
+    event Claimed(address indexed user, uint256 amount);
+    event Allocated(address indexed user, uint256 amount);
+
+    constructor(address _token, address initialOwner) Ownable(initialOwner) {
+        token = IERC20(_token);
+    }
+
+    function allocate(address[] calldata users, uint256[] calldata amounts) external onlyOwner {
+        require(users.length == amounts.length, "Length mismatch");
+        for (uint256 i = 0; i < users.length; i++) {
+            claimable[users[i]] = amounts[i];
+            emit Allocated(users[i], amounts[i]);
+        }
+    }
+
+    function claim() external {
+        require(!hasClaimed[msg.sender], "Already claimed");
+        uint256 amount = claimable[msg.sender];
+        require(amount > 0, "Nothing to claim");
+
+        hasClaimed[msg.sender] = true;
+        claimable[msg.sender] = 0;
+        token.safeTransfer(msg.sender, amount);
+        emit Claimed(msg.sender, amount);
+    }
+
+    function withdrawRemaining(address to) external onlyOwner {
+        uint256 balance = token.balanceOf(address(this));
+        token.safeTransfer(to, balance);
+    }
+}
