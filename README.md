@@ -1029,3 +1029,54 @@ contract DailyClaimNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
 
     receive() external payable {}
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract SubscriptionNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
+    uint256 public nextTokenId;
+    uint256 public maxSupply = 300;
+    uint256 public mintPrice = 0.05 ether;
+    uint256 public subscriptionDuration = 30 days;
+
+    mapping(uint256 => uint256) public subscriptionExpiry;
+
+    constructor() ERC721("Subscription NFT", "SUBNFT") Ownable(msg.sender) {}
+
+    function mint(string memory uri) external payable nonReentrant {
+        require(nextTokenId < maxSupply, "Max supply reached");
+        require(msg.value >= mintPrice, "Insufficient payment");
+
+        uint256 tokenId = nextTokenId++;
+        subscriptionExpiry[tokenId] = block.timestamp + subscriptionDuration;
+
+        _safeMint(msg.sender, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    function renew(uint256 tokenId) external payable nonReentrant {
+        require(ownerOf(tokenId) == msg.sender, "Not owner");
+        require(msg.value >= mintPrice, "Insufficient payment");
+
+        if (block.timestamp > subscriptionExpiry[tokenId]) {
+            subscriptionExpiry[tokenId] = block.timestamp + subscriptionDuration;
+        } else {
+            subscriptionExpiry[tokenId] += subscriptionDuration;
+        }
+    }
+
+    function isActive(uint256 tokenId) public view returns (bool) {
+        return block.timestamp <= subscriptionExpiry[tokenId];
+    }
+
+    function getExpiry(uint256 tokenId) external view returns (uint256) {
+        return subscriptionExpiry[tokenId];
+    }
+
+    function withdraw() external onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
+}
