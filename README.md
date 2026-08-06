@@ -1150,3 +1150,55 @@ contract Counter {
         emit CountChanged(count, msg.sender);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract GuildVoting {
+    struct Proposal {
+        string description;
+        uint256 yesVotes;
+        uint256 noVotes;
+        uint256 deadline;
+        bool executed;
+        mapping(address => bool) hasVoted;
+    }
+
+    mapping(uint256 => Proposal) public proposals;
+    uint256 public proposalCount;
+    address public owner;
+
+    event ProposalCreated(uint256 indexed id, string description, uint256 deadline);
+    event Voted(uint256 indexed id, address voter, bool support);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function createProposal(string calldata description, uint256 durationInSeconds) external {
+        require(msg.sender == owner, "Only owner");
+        uint256 id = proposalCount++;
+        Proposal storage p = proposals[id];
+        p.description = description;
+        p.deadline = block.timestamp + durationInSeconds;
+        emit ProposalCreated(id, description, p.deadline);
+    }
+
+    function vote(uint256 proposalId, bool support) external {
+        Proposal storage p = proposals[proposalId];
+        require(block.timestamp < p.deadline, "Voting ended");
+        require(!p.hasVoted[msg.sender], "Already voted");
+
+        p.hasVoted[msg.sender] = true;
+        if (support) {
+            p.yesVotes++;
+        } else {
+            p.noVotes++;
+        }
+        emit Voted(proposalId, msg.sender, support);
+    }
+
+    function getResult(uint256 proposalId) external view returns (uint256 yes, uint256 no, bool active) {
+        Proposal storage p = proposals[proposalId];
+        return (p.yesVotes, p.noVotes, block.timestamp < p.deadline);
+    }
+}
