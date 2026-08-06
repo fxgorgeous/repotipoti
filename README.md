@@ -1248,3 +1248,82 @@ contract GuildAirdrop is Ownable {
         token.safeTransfer(to, balance);
     }
 }
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract GuildEscrow {
+    enum State { Created, Locked, Released, Refunded, Disputed }
+
+    struct Escrow {
+        address payer;
+        address payee;
+        address arbiter;
+        uint256 amount;
+        State state;
+    }
+
+    mapping(uint256 => Escrow) public escrows;
+    uint256 public escrowCount;
+
+    event EscrowCreated(uint256 indexed id, address payer, address payee, uint256 amount);
+    event Locked(uint256 indexed id);
+    event Released(uint256 indexed id);
+    event Refunded(uint256 indexed id);
+    event Disputed(uint256 indexed id);
+
+    function createEscrow(address payee, address arbiter) external payable returns (uint256) {
+        require(msg.value > 0, "Must send ETH");
+        require(payee != address(0) && arbiter != address(0), "Invalid addresses");
+
+        uint256 id = escrowCount++;
+        escrows[id] = Escrow({
+            payer: msg.sender,
+            payee: payee,
+            arbiter: arbiter,
+            amount: msg.value,
+            state: State.Created
+        });
+
+        emit EscrowCreated(id, msg.sender, payee, msg.value);
+        return id;
+    }
+
+    function lock(uint256 id) external {
+        Escrow storage e = escrows[id];
+        require(msg.sender == e.payer, "Only payer");
+        require(e.state == State.Created, "Invalid state");
+        e.state = State.Locked;
+        emit Locked(id);
+    }
+
+    function release(uint256 id) external {
+        Escrow storage e = escrows[id];
+        require(msg.sender == e.payer || msg.sender == e.arbiter, "Not authorized");
+        require(e.state == State.Locked, "Not locked");
+
+        e.state = State.Released;
+        (bool success, ) = e.payee.call{value: e.amount}("");
+        require(success, "Transfer failed");
+        emit Released(id);
+    }
+
+    function refund(uint256 id) external {
+        Escrow storage e = escrows[id];
+        require(msg.sender == e.payee || msg.sender == e.arbiter, "Not authorized");
+        require(e.state == State.Locked, "Not locked");
+
+        e.state = State.Refunded;
+        (bool success, ) = e.payer.call{value: e.amount}("");
+        require(success, "Transfer failed");
+        emit Refunded(id);
+    }
+
+    function dispute(uint256 id) external {
+        Escrow storage e = escrows[id];
+        require(msg.sender == e.payer || msg.sender == e.payee, "Not party");
+        require(e.state == State.Locked, "Not locked");
+        e.state = State.Disputed;
+        emit Disputed(id);
+    }
+}
