@@ -1327,3 +1327,60 @@ contract GuildEscrow {
         emit Disputed(id);
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract GuildTimelock {
+    uint256 public constant MIN_DELAY = 1 hours;
+    uint256 public constant MAX_DELAY = 30 days;
+
+    address public admin;
+    mapping(bytes32 => bool) public queued;
+    mapping(bytes32 => uint256) public eta; // estimated time of arrival
+
+    event Queued(bytes32 indexed txHash, address target, uint256 value, bytes data, uint256 eta);
+    event Executed(bytes32 indexed txHash, address target, uint256 value, bytes data);
+    event Cancelled(bytes32 indexed txHash);
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Not admin");
+        _;
+    }
+
+    constructor(address _admin) {
+        admin = _admin;
+    }
+
+    function queue(address target, uint256 value, bytes calldata data, uint256 delay) external onlyAdmin returns (bytes32) {
+        require(delay >= MIN_DELAY && delay <= MAX_DELAY, "Invalid delay");
+        bytes32 txHash = keccak256(abi.encode(target, value, data, block.timestamp + delay));
+        require(!queued[txHash], "Already queued");
+
+        queued[txHash] = true;
+        eta[txHash] = block.timestamp + delay;
+
+        emit Queued(txHash, target, value, data, eta[txHash]);
+        return txHash;
+    }
+
+    function execute(address target, uint256 value, bytes calldata data, uint256 _eta) external onlyAdmin {
+        bytes32 txHash = keccak256(abi.encode(target, value, data, _eta));
+        require(queued[txHash], "Not queued");
+        require(block.timestamp >= _eta, "Too early");
+        require(block.timestamp <= _eta + 14 days, "Expired");
+
+        queued[txHash] = false;
+        (bool success, ) = target.call{value: value}(data);
+        require(success, "Execution failed");
+
+        emit Executed(txHash, target, value, data);
+    }
+
+    function cancel(bytes32 txHash) external onlyAdmin {
+        require(queued[txHash], "Not queued");
+        queued[txHash] = false;
+        emit Cancelled(txHash);
+    }
+
+    receive() external payable {}
+}
