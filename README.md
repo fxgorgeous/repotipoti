@@ -1428,3 +1428,62 @@ contract GuildBatchTransfer is Ownable {
         }
     }
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract GuildReferral {
+    address public owner;
+    uint256 public rewardAmount; // en wei
+    mapping(address => address) public referredBy;
+    mapping(address => uint256) public referralCount;
+    mapping(address => uint256) public pendingRewards;
+
+    event Registered(address indexed user, address indexed referrer);
+    event RewardClaimed(address indexed user, uint256 amount);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
+    constructor(uint256 _rewardAmount) {
+        owner = msg.sender;
+        rewardAmount = _rewardAmount;
+    }
+
+    function register(address referrer) external {
+        require(referredBy[msg.sender] == address(0), "Already registered");
+        require(referrer != msg.sender, "Cannot refer yourself");
+        require(referrer != address(0), "Invalid referrer");
+
+        referredBy[msg.sender] = referrer;
+        referralCount[referrer]++;
+        pendingRewards[referrer] += rewardAmount;
+
+        emit Registered(msg.sender, referrer);
+    }
+
+    function claimRewards() external {
+        uint256 amount = pendingRewards[msg.sender];
+        require(amount > 0, "No rewards");
+        require(address(this).balance >= amount, "Insufficient contract balance");
+
+        pendingRewards[msg.sender] = 0;
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");
+        emit RewardClaimed(msg.sender, amount);
+    }
+
+    function setRewardAmount(uint256 newAmount) external onlyOwner {
+        rewardAmount = newAmount;
+    }
+
+    function fund() external payable onlyOwner {}
+
+    function withdraw(address to, uint256 amount) external onlyOwner {
+        (bool success, ) = to.call{value: amount}("");
+        require(success, "Withdraw failed");
+    }
+
+    receive() external payable {}
+}
