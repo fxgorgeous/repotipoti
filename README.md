@@ -1384,3 +1384,47 @@ contract GuildTimelock {
 
     receive() external payable {}
 }
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract GuildBatchTransfer is Ownable {
+    using SafeERC20 for IERC20;
+
+    event EthSent(address indexed to, uint256 amount);
+    event TokenSent(address indexed token, address indexed to, uint256 amount);
+
+    constructor(address initialOwner) Ownable(initialOwner) {}
+
+    function batchSendETH(address[] calldata recipients, uint256[] calldata amounts) external payable onlyOwner {
+        require(recipients.length == amounts.length, "Length mismatch");
+        uint256 total = 0;
+        for (uint256 i = 0; i < amounts.length; i++) {
+            total += amounts[i];
+        }
+        require(msg.value >= total, "Insufficient ETH");
+
+        for (uint256 i = 0; i < recipients.length; i++) {
+            (bool success, ) = recipients[i].call{value: amounts[i]}("");
+            require(success, "ETH transfer failed");
+            emit EthSent(recipients[i], amounts[i]);
+        }
+
+        // Devolver sobrante
+        if (msg.value > total) {
+            (bool success, ) = msg.sender.call{value: msg.value - total}("");
+            require(success, "Refund failed");
+        }
+    }
+
+    function batchSendToken(address token, address[] calldata recipients, uint256[] calldata amounts) external onlyOwner {
+        require(recipients.length == amounts.length, "Length mismatch");
+        for (uint256 i = 0; i < recipients.length; i++) {
+            IERC20(token).safeTransferFrom(msg.sender, recipients[i], amounts[i]);
+            emit TokenSent(token, recipients[i], amounts[i]);
+        }
+    }
+}
